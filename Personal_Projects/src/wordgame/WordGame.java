@@ -4,10 +4,14 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
- *
+ * Program to print a random list of words with different phonetic starts.
  * @author cstit
  */
 public class WordGame {
+	/**
+	 * Returns the next prefix to be tested
+	 * @return The next prefix to be tested
+	 */
     public static String ToNext() {
         File SL = new File("C:\\Users\\cstit\\Desktop\\PrefixList.txt");
         Scanner pres = null;
@@ -20,7 +24,7 @@ public class WordGame {
         return pl;
     }
     /**
-     *
+     * Tests the prefix against the entire list of words.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
