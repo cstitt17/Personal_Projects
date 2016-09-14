@@ -18,9 +18,9 @@ public class DrawComponent extends JComponent {
 		Graphics2D g2d = (Graphics2D) g;
 		Rectangle box = new Rectangle(5,10,20,30);
 		Ellipse2D.Double ell = new Ellipse2D.Double(5,10,20,30);
-		Ellipse2D.Double cir = new Ellipse2D.Double(5,10,20,30);
+		Ellipse2D.Double cir = new Ellipse2D.Double(5,10,20,20);
 		g2d.draw(box);
 		g2d.draw(ell);
-		
+		g2d.draw(cir);
 	}
 }

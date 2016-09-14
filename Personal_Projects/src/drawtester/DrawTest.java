@@ -11,7 +11,7 @@ public class DrawTest {
 		tst.setTitle("Test Frame");
 		tst.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tst.setVisible(true);
-		DrawComponent rect = new DrawComponent();
-		tst.add(rect);
+		DrawComponent shapes = new DrawComponent();
+		tst.add(shapes);
 	}
 }
