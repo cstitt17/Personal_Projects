@@ -22,25 +22,9 @@ public class A2G {
         double sina = Math.sin(angle);
         double x = cosa*dist;
         double y = sina*dist;
-        System.out.println("What roman-numeric quadrant of the graph?");
-        Scanner area = new Scanner(System.in);
-        String quad = area.nextLine();
-        switch (quad) {
-            case "I":
-                System.out.println("About"+x+"units right and "+y+"units up.");
-                break;
-            case "II":
-                System.out.println("About"+x+"units left and "+y+"units up.");
-                break;
-            case "III":
-                System.out.println("About"+x+"units left and "+y+"units down.");
-                break;
-            case "IV":
-                System.out.println("About"+x+"units right and "+y+"units down.");
-                break;
-            default:
-                System.out.println("Not a valid quadrant.");
-                break;
-        }
+        System.out.println("About "+x+" x-units and");
+        System.out.println(y+" y-units away from the origin.");
+        Grapher ln = new Grapher(x,y);
+        ln.GraphEquation();
     }
 }
