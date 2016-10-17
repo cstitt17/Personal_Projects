@@ -9,6 +9,7 @@ public class Grapher extends JComponent{
 	private Graphics2D outline;
 	private double x=0,y=0;
 	//private String equation="";
+	
 	public Grapher(double xLE, double yLE) {
 		tst = new JFrame();
 		tst.setSize(650,650);
@@ -18,14 +19,18 @@ public class Grapher extends JComponent{
 		x=xLE;
 		y=yLE;
 	}
+	
 	public Grapher(String eq) {
 		//equation = eq;
+		//String array with operations as methods if operation sign detected
 	}
+	
 	public void GraphEquation() {
 		Grapher linComp = new Grapher(x,y);
 		tst.add(linComp);
 		tst.setVisible(true);
 	}
+	
 	public void paintComponent(Graphics g) {
 		outline = (Graphics2D) g;
 		outline.setColor(Color.BLACK);
@@ -35,6 +40,7 @@ public class Grapher extends JComponent{
 			outline.draw(xdraw);
 			outline.draw(ydraw);
 		}
+		
 		outline.setColor(Color.BLUE);
 		Line2D.Double xyLine = new Line2D.Double(300,300,300+30*x,300-30*y);
 		outline.draw(xyLine);
