@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.ArrayList;
 public class WordGame2 {
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		File WL = new File("C:\\Users\\cstit\\Desktop\\WordList.txt");
         if (!(WL.exists())) {
