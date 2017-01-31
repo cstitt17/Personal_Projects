@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class BumbleBee {
 	public static void main(String[] args) {
-		File WL = new File("C:\\Users\\cstit\\Desktop\\WordList.txt");
+		File WL = new File("C:\\Users\\cstit\\Desktop\\My Stuff\\My Programs\\WordList.txt");
         if (!(WL.exists())) {
             System.out.println("This file does not exist.");
             return;
