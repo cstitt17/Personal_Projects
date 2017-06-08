@@ -57,11 +57,12 @@ public class ChessBoard {
 	 * Moves the piece from loc to other
 	 * @param loc the old location of the piece
 	 * @param other the new location of the piece
+	 * @param castleOrEP true if the move is a castle or En Passant, false otherwise
 	 */
-	public void movePiece(String loc, String other) {
+	public void movePiece(String loc, String other, boolean castleOrEP) {
 		for(ChessPiece piece : board)
 			if (piece.getLocation().equals(loc))
-				if(isValidMove(piece, loc))
+				if(castleOrEP || isValidMove(piece, loc))
 					piece.changeLocation(other);
 				else
 					throw new IllegalStateException("Move is not valid");

@@ -1,13 +1,17 @@
 package game;
 
+import java.util.ArrayList;
+
 public class ChessGame {
 	private ChessBoard board;
+	private ArrayList<String> moves;
 	
 	/**
 	 * Constructs a new chess game.
 	 */
 	public ChessGame() {
 		board = new ChessBoard();
+		moves = new ArrayList<String>();
 	}
 	
 	/**
@@ -16,6 +20,14 @@ public class ChessGame {
 	 */
 	public ChessBoard getChessBoard() {
 		return board;
+	}
+	
+	/**
+	 * Returns an array list containing all moves made during the game
+	 * @return an array list containing all moves made during the game
+	 */
+	public ArrayList<String> getMoves() {
+		return moves;
 	}
 	
 	/**
@@ -53,9 +65,9 @@ public class ChessGame {
 		for (int i = king.getLocation().charAt(0)-1; i <= king.getLocation().charAt(0)+1; i++)
 			for (int j=king.getLocation().charAt(1)-1; j<=king.getLocation().charAt(1)+1; j++)
 				if (board.isValidMove(king, ""+((char) i) + j)) {
-					board.movePiece(king.getLocation(), ""+((char) i) + j);
+					board.movePiece(king.getLocation(), ""+((char) i) + j, false);
 					if (check(kingIsWhite))
-						board.movePiece(""+((char) i) + j, king.getLocation());
+						board.movePiece(""+((char) i) + j, king.getLocation(), false);
 					else
 						return false;
 				}
@@ -66,9 +78,89 @@ public class ChessGame {
 	 * Makes one move of a piece, if valid
 	 * @param move A string in the format location + space + other location
 	 */
-	public void makeMove(String move) {
+	public void makeMove(String move, boolean castleOrEnPassant) {
+		moves.add(move);
 		String loc = move.substring(0, 2);
 		String other = move.substring(3);
-		board.movePiece(loc, other);
+		board.movePiece(loc, other, castleOrEnPassant);
+	}
+	
+	/**
+	 * Returns true if player can castle, false otherwise
+	 * @param kingIsWhite if the king trying to castle if white, true; otherwise, false
+	 * @param kingSide if the castle is on the king side, true; otherwise, false
+	 * @return true if player can castle, false otherwise
+	 */
+	private boolean canCastle(boolean kingIsWhite, boolean kingSide) {
+		for (String move : moves)
+			if (kingIsWhite)
+				if (kingSide) {
+					if (move.substring(0, 2).equals("h1") || move.substring(0, 2).equals("e1"))
+						return false;
+				} else {
+					if (move.substring(0, 2).equals("a1") || move.substring(0, 2).equals("e1"))
+						return false;
+				}
+			else
+				if (kingSide) {
+					if (move.substring(0, 2).equals("h8") || move.substring(0, 2).equals("e8"))
+						return false;
+				} else {
+					if (move.substring(0, 2).equals("a8") || move.substring(0, 2).equals("e8"))
+						return false;
+				}
+		
+		for(ChessPiece p : board.getBoard())
+			if (kingIsWhite)
+				if (kingSide) {
+					if (p.getLocation().equals("f1") || p.getLocation().equals("g1"))
+						return false;
+				} else {
+					if (p.getLocation().equals("b1") || p.getLocation().equals("c1") || p.getLocation().equals("d1"))
+						return false;
+				}
+			else
+				if (kingSide) {
+					if (p.getLocation().equals("f8") || p.getLocation().equals("g8"))
+						return false;
+				} else {
+					if (p.getLocation().equals("b8") || p.getLocation().equals("c8") || p.getLocation().equals("d8"))
+						return false;
+				}
+		
+		return !check(kingIsWhite);
+	}
+	
+	/**
+	 * Makes a castle, if valid
+	 * @param kingIsWhite if the king trying to castle if white, true; otherwise, false
+	 * @param kingSide if the castle is on the king side, true; otherwise, false
+	 */
+	public void castle(boolean kingIsWhite, boolean kingSide) {
+		if (!canCastle(kingIsWhite, kingSide))
+			throw new IllegalStateException("Castle is not valid");
+		
+		String rookMove = "";
+		String kingMove = "";
+		
+		if (kingIsWhite)
+			if (kingSide) {
+				rookMove = "h1 f1";
+				kingMove = "e1 g1";
+			} else {
+				rookMove = "h1 d1";
+				kingMove = "a1 c1";
+			}
+		else
+			if (kingSide) {
+				rookMove = "h8 f8";
+				kingMove = "e8 g8";
+			} else {
+				rookMove = "h8 d8";
+				kingMove = "a8 c8";
+			}
+		
+		makeMove(rookMove, true);
+		makeMove(kingMove, true);
 	}
 }
