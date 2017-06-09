@@ -56,4 +56,8 @@ public class ChessPiece {
 	public String getLocation() {
 		return loc;
 	}
+	
+	public String toString() {
+		return type + isWhite + loc;
+	}
 }

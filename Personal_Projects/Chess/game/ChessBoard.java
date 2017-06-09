@@ -58,13 +58,13 @@ public class ChessBoard {
 	 * @param castleOrEP true if the move is a castle or En Passant, false otherwise
 	 */
 	public void movePiece(String loc, String other, boolean castleOrEP) {
-		if(castleOrEP || isValidMove(getPiece(loc), loc)) {
+		if(castleOrEP || isValidMove(getPiece(loc), other)) {
 			if (getPiece(other) != null)
 				board.remove(getPiece(other));
 			getPiece(loc).changeLocation(other);
 		}
 		else
-			throw new IllegalStateException("Move is not valid");
+			throw new IllegalStateException("Move "+loc+" to "+other+" is not valid");
 	}
 	
 	/**
@@ -79,27 +79,25 @@ public class ChessBoard {
 		else if (piece.getLocation().equals(loc))
 			return false;
 		else
-			if (getPiece(loc).getIsWhite() == piece.getIsWhite())
+			if (getPiece(loc) != null && getPiece(loc).getIsWhite() == piece.getIsWhite())
 				return false;
 		
-		if (piece.getType().equals("rook") && (piece.getLocation().charAt(0) != loc.charAt(0) && piece.getLocation().charAt(1) != loc.charAt(1)))
+		if (piece.getType().equals("rook") && piece.getLocation().charAt(0) != loc.charAt(0) && piece.getLocation().charAt(1) != loc.charAt(1))
 			return false;
-		else if (piece.getType().equals("knight"))
+		if (piece.getType().equals("knight"))
 			return validateKnight(piece.getLocation(), loc);
-		else if (piece.getType().equals("bishop"))
-			if (piece.getLocation().charAt(0) != loc.charAt(0) && piece.getLocation().charAt(1) == loc.charAt(1))
-				return false;
-			else if ((piece.getLocation().charAt(0) == loc.charAt(0) && piece.getLocation().charAt(1) != loc.charAt(1)))
+		if (piece.getType().equals("bishop"))
+			if (Math.abs(piece.getLocation().charAt(0)-loc.charAt(0)) != Math.abs(piece.getLocation().charAt(1)-loc.charAt(1)))
 				return false;
 		
 		if (piece.getType().equals("queen"))
 			return !validateKnight(piece.getLocation(), loc);
-		else if (piece.getType().equals("pawn"))
+		if (piece.getType().equals("pawn"))
 			return validatePawn(piece.getIsWhite(), piece.getLocation(), loc);
-		else if (piece.getType().equals("king") && (Math.abs(piece.getLocation().charAt(0) - loc.charAt(0)) <= 1 && Math.abs(piece.getLocation().charAt(1) - loc.charAt(1)) <= 1))
+		if (piece.getType().equals("king") && (Math.abs(piece.getLocation().charAt(0) - loc.charAt(0)) <= 1 && Math.abs(piece.getLocation().charAt(1) - loc.charAt(1)) <= 1))
 			return !validateKnight(piece.getLocation(), loc);
 		
-		return false;
+		return true;
 	}
 	
 	/**
@@ -123,7 +121,7 @@ public class ChessBoard {
 	 * @return true if the knight's move is valid, false otherwise
 	 */
 	private boolean validateKnight(String loc, String other) {
-		return (Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1) || Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1;
+		return (Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1) || (Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1);
 	}
 	
 	/**

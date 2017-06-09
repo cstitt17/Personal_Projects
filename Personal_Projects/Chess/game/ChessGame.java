@@ -57,17 +57,19 @@ public class ChessGame {
 		if (!check(kingIsWhite))
 			return false;
 		
-		ChessPiece king = null;;
+		ChessPiece king = null;
 		for(ChessPiece p : board.getBoard())
 			if (p.getType().equals("king") && p.getIsWhite() == kingIsWhite)
 				king = p;
 		
-		for (int i = king.getLocation().charAt(0)-1; i <= king.getLocation().charAt(0)+1; i++)
-			for (int j=king.getLocation().charAt(1)-1; j<=king.getLocation().charAt(1)+1; j++)
+		String kingLoc = king.getLocation();
+		
+		for (int i = kingLoc.charAt(0)-1; i <= kingLoc.charAt(0)+1; i++)
+			for (int j=kingLoc.charAt(1)-1; j<=kingLoc.charAt(1)+1; j++)
 				if (board.isValidMove(king, ""+((char) i) + ((char) j))) {
 					board.movePiece(king.getLocation(), ""+((char) i) + ((char) j), false);
 					if (check(kingIsWhite))
-						board.movePiece(""+((char) i) + ((char) j), king.getLocation(), false);
+						board.movePiece(""+((char) i) + ((char) j), kingLoc, false);
 					else
 						return false;
 				}
@@ -171,7 +173,7 @@ public class ChessGame {
 	 * @return true if player can en passant, false otherwise
 	 */
 	public boolean canEnPassant(String yourLoc, String otherLoc) {
-		if (!board.getPiece(yourLoc).getType().equals("pawn") || !board.getPiece(otherLoc).getType().equals("pawn"))
+		if (board.getPiece(yourLoc) != null && board.getPiece(otherLoc) != null && (!board.getPiece(yourLoc).getType().equals("pawn") || !board.getPiece(otherLoc).getType().equals("pawn")))
 			return false;
 		
 		if (yourLoc.charAt(1) == '5')
