@@ -48,9 +48,7 @@ public class ChessBoard {
 	 * @param other the new type of the piece
 	 */
 	public void changePiece(String loc, String other) {
-		for(ChessPiece piece : board)
-			if (piece.getLocation().equals(loc))
-				piece.changeType(other);
+		getPiece(loc).changeType(other);
 	}
 	
 	/**
@@ -60,12 +58,13 @@ public class ChessBoard {
 	 * @param castleOrEP true if the move is a castle or En Passant, false otherwise
 	 */
 	public void movePiece(String loc, String other, boolean castleOrEP) {
-		for(ChessPiece piece : board)
-			if (piece.getLocation().equals(loc))
-				if(castleOrEP || isValidMove(piece, loc))
-					piece.changeLocation(other);
-				else
-					throw new IllegalStateException("Move is not valid");
+		if(castleOrEP || isValidMove(getPiece(loc), loc)) {
+			if (getPiece(other) != null)
+				board.remove(getPiece(other));
+			getPiece(loc).changeLocation(other);
+		}
+		else
+			throw new IllegalStateException("Move is not valid");
 	}
 	
 	/**
@@ -80,9 +79,8 @@ public class ChessBoard {
 		else if (piece.getLocation().equals(loc))
 			return false;
 		else
-			for(ChessPiece p : board)
-				if (p.getLocation().equals(loc) && p.getIsWhite() == piece.getIsWhite())
-					return false;
+			if (getPiece(loc).getIsWhite() == piece.getIsWhite())
+				return false;
 		
 		if (piece.getType().equals("rook") && (piece.getLocation().charAt(0) != loc.charAt(0) && piece.getLocation().charAt(1) != loc.charAt(1)))
 			return false;
@@ -128,7 +126,6 @@ public class ChessBoard {
 		return (Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1) || Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1;
 	}
 	
-	//TODO: En Passant
 	/**
 	 * Returns true if the pawn's move is valid, false otherwise
 	 * @param isWhite true if the pawn is white, false otherwise
@@ -138,9 +135,8 @@ public class ChessBoard {
 	 */
 	private boolean validatePawn(boolean isWhite, String loc, String other) {
 		boolean capture = false;
-		for(ChessPiece piece : board)
-			if (piece.getLocation().equals(other))
-				capture = true;
+		if (getPiece(other) != null)
+			capture = true;
 		
 		if (Math.abs(other.charAt(0) - loc.charAt(0)) == 1)
 			if (isWhite)
@@ -150,9 +146,9 @@ public class ChessBoard {
 		
 		if (Math.abs(other.charAt(1)-loc.charAt(1))==2 && Math.abs(other.charAt(0)-loc.charAt(0))==0)
 			if (isWhite)
-				return loc.charAt(1)==2;
+				return loc.charAt(1)=='2';
 			else
-				return loc.charAt(1)==7;
+				return loc.charAt(1)=='7';
 		
 		if (isWhite)
 			return other.charAt(0)==loc.charAt(0) && other.charAt(1) - loc.charAt(1) == 1;

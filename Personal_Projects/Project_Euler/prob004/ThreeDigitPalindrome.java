@@ -20,7 +20,7 @@ public class ThreeDigitPalindrome {
 		}
 		
 		list.trimToSize();
-		list
+		//list
 	}
 
 }

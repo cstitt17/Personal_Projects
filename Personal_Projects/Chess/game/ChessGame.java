@@ -64,10 +64,10 @@ public class ChessGame {
 		
 		for (int i = king.getLocation().charAt(0)-1; i <= king.getLocation().charAt(0)+1; i++)
 			for (int j=king.getLocation().charAt(1)-1; j<=king.getLocation().charAt(1)+1; j++)
-				if (board.isValidMove(king, ""+((char) i) + j)) {
-					board.movePiece(king.getLocation(), ""+((char) i) + j, false);
+				if (board.isValidMove(king, ""+((char) i) + ((char) j))) {
+					board.movePiece(king.getLocation(), ""+((char) i) + ((char) j), false);
 					if (check(kingIsWhite))
-						board.movePiece(""+((char) i) + j, king.getLocation(), false);
+						board.movePiece(""+((char) i) + ((char) j), king.getLocation(), false);
 					else
 						return false;
 				}
@@ -162,5 +162,40 @@ public class ChessGame {
 		
 		makeMove(rookMove, true);
 		makeMove(kingMove, true);
+	}
+	
+	/**
+	 * Returns true if player can en passant, false otherwise
+	 * @param yourLoc The location of your pawn
+	 * @param otherLoc The position of the other pawn
+	 * @return true if player can en passant, false otherwise
+	 */
+	private boolean canEnPassant(String yourLoc, String otherLoc) {
+		if (!board.getPiece(yourLoc).getType().equals("pawn") || !board.getPiece(otherLoc).getType().equals("pawn"))
+			return false;
+		
+		if (yourLoc.charAt(1) == '5')
+			return moves.contains("" + otherLoc.substring(0,1) + (otherLoc.charAt(1) + 2) + " " + otherLoc) && board.getPiece(otherLoc.substring(0, 1) + (otherLoc.charAt(1) + 1)) == null;
+		else if (yourLoc.charAt(1) == '4')
+			return moves.contains("" + otherLoc.substring(0,1) + ((char)otherLoc.charAt(1) - 2) + " " + otherLoc) && board.getPiece(otherLoc.substring(0, 1) + (otherLoc.charAt(1) - 1)) == null;
+		else
+			return false;
+	}
+	
+	/**
+	 * Makes an En Passant if valid
+	 * @param yourLoc the location of your piece
+	 * @param otherLoc the location of the other piece
+	 */
+	public void enPassant(String yourLoc, String otherLoc) {
+		if (!canEnPassant(yourLoc, otherLoc))
+			throw new IllegalStateException("En Passant is not valid");
+		
+		makeMove(yourLoc + " " + otherLoc, true);
+		
+		if (yourLoc.charAt(1) == '5')
+			makeMove(otherLoc.substring(0, 1) + (otherLoc.charAt(1) + 1), true);
+		else if (yourLoc.charAt(1) == '4')
+			makeMove(otherLoc.substring(0, 1) + (otherLoc.charAt(1) - 1), true);
 	}
 }
