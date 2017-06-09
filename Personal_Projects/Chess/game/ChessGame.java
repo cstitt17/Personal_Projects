@@ -91,7 +91,7 @@ public class ChessGame {
 	 * @param kingSide if the castle is on the king side, true; otherwise, false
 	 * @return true if player can castle, false otherwise
 	 */
-	private boolean canCastle(boolean kingIsWhite, boolean kingSide) {
+	public boolean canCastle(boolean kingIsWhite, boolean kingSide) {
 		for (String move : moves)
 			if (kingIsWhite)
 				if (kingSide) {
@@ -170,7 +170,7 @@ public class ChessGame {
 	 * @param otherLoc The position of the other pawn
 	 * @return true if player can en passant, false otherwise
 	 */
-	private boolean canEnPassant(String yourLoc, String otherLoc) {
+	public boolean canEnPassant(String yourLoc, String otherLoc) {
 		if (!board.getPiece(yourLoc).getType().equals("pawn") || !board.getPiece(otherLoc).getType().equals("pawn"))
 			return false;
 		

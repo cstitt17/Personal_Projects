@@ -12,7 +12,7 @@ public class ChessBoard {
 	public ChessBoard() {
 		board = new ArrayList<ChessPiece>(32);
 		
-		String[] type = {"rook","knight","bishop","queen","king","king","knight","rook"};
+		String[] type = {"rook","knight","bishop","queen","king","bishop","knight","rook"};
 		String[] let = {"a","b","c","d","e","f","g","h"};
 		for (int i=0; i<8; i++) {
 			board.add(new ChessPiece(type[i], false, let[i]+1));
