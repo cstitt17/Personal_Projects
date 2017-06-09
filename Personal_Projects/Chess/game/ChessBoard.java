@@ -85,17 +85,17 @@ public class ChessBoard {
 		if (piece.getType().equals("rook") && piece.getLocation().charAt(0) != loc.charAt(0) && piece.getLocation().charAt(1) != loc.charAt(1))
 			return false;
 		if (piece.getType().equals("knight"))
-			return validateKnight(piece.getLocation(), loc);
+			return (Math.abs(loc.charAt(0) - piece.getLocation().charAt(0)) == 2 && Math.abs(loc.charAt(1) - piece.getLocation().charAt(1)) == 1) || (Math.abs(loc.charAt(1) - piece.getLocation().charAt(1)) == 2 && Math.abs(loc.charAt(0) - piece.getLocation().charAt(0)) == 1);
 		if (piece.getType().equals("bishop"))
 			if (Math.abs(piece.getLocation().charAt(0)-loc.charAt(0)) != Math.abs(piece.getLocation().charAt(1)-loc.charAt(1)))
 				return false;
 		
 		if (piece.getType().equals("queen"))
-			return !validateKnight(piece.getLocation(), loc);
+			return isValidMove(new ChessPiece("rook", !piece.getIsWhite(), piece.getLocation()), loc) || isValidMove(new ChessPiece("bishop", !piece.getIsWhite(), piece.getLocation()), loc);
 		if (piece.getType().equals("pawn"))
 			return validatePawn(piece.getIsWhite(), piece.getLocation(), loc);
-		if (piece.getType().equals("king") && (Math.abs(piece.getLocation().charAt(0) - loc.charAt(0)) <= 1 && Math.abs(piece.getLocation().charAt(1) - loc.charAt(1)) <= 1))
-			return !validateKnight(piece.getLocation(), loc);
+		if (piece.getType().equals("king"))
+			return Math.abs(piece.getLocation().charAt(0) - loc.charAt(0)) <= 1 && Math.abs(piece.getLocation().charAt(1) - loc.charAt(1)) <= 1;
 		
 		return true;
 	}
@@ -112,16 +112,6 @@ public class ChessBoard {
 			return false;
 		else
 			return true;
-	}
-	
-	/**
-	 * Returns true if the knight's move is valid, false otherwise
-	 * @param loc the current position of the knight
-	 * @param other the new location of the knight
-	 * @return true if the knight's move is valid, false otherwise
-	 */
-	private boolean validateKnight(String loc, String other) {
-		return (Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1) || (Math.abs(other.charAt(0) - loc.charAt(0)) == 2 && Math.abs(other.charAt(1) - loc.charAt(1)) == 1);
 	}
 	
 	/**

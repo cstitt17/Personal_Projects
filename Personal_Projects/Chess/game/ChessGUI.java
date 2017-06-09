@@ -3,7 +3,8 @@ package game;
 import processing.core.PApplet;
 import processing.core.PImage;
 //1=49, a=97
-//knight at b8 put king at e1 into checkmate
+//castling causes null pointer exception
+//en passant causes move not valid
 public class ChessGUI extends PApplet{
 	private ChessGame game;
 	private String move;
@@ -58,7 +59,7 @@ public class ChessGUI extends PApplet{
 			preformMove(move.toLowerCase());
 			move = "";
 			
-			/*if (game.check(true))
+			if (game.check(true))
 				if (game.checkmate(true))
 					System.out.println("White is in checkmate!"); //win=
 				else
@@ -67,7 +68,7 @@ public class ChessGUI extends PApplet{
 				if (game.checkmate(false))
 					System.out.println("Black is in checkmate!");
 				else
-					System.out.println("Black is in check!");*/
+					System.out.println("Black is in check!");
 		}
 	}
 	
