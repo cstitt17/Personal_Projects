@@ -3,11 +3,15 @@ package game;
 import processing.core.PApplet;
 import processing.core.PImage;
 //1=49, a=97
+//TODO: Fix Queen-side castle (both colors); display squares' codes
 public class ChessGUI extends PApplet{
 	private ChessGame game;
 	private String move;
 	private boolean isWhiteTurn;
 	
+	/**
+	 * Sets up GUI; run once
+	 */
 	public void setup() {
 		size(730,730); //728 = 8 * 91
 		PImage background = loadImage("../../images/b4.png");
@@ -18,6 +22,9 @@ public class ChessGUI extends PApplet{
 		move = "";
 	}
 	
+	/**
+	 * Runs infinitely until end of program to draw GUI
+	 */
 	public void draw() {
 		PImage background = loadImage("../../images/b4.png");
 		image(background, 0, 0);
@@ -47,16 +54,19 @@ public class ChessGUI extends PApplet{
 		}
 	}
 	
+	/**
+	 * Interprets the key pressed any time a key is pressed
+	 */
 	public void keyPressed() {
 		move += (char) keyCode;
 		
 		if (move.length() == 5) {
-			preformMove(move.toLowerCase());
+			performMove(move.toLowerCase());
 			move = "";
 			
 			if (game.check(true))
 				if (game.checkmate(true))
-					System.out.println("White is in checkmate!"); //win=
+					System.out.println("White is in checkmate!");
 				else
 					System.out.println("White is in check!");
 			else if (game.check(false))
@@ -67,7 +77,11 @@ public class ChessGUI extends PApplet{
 		}
 	}
 	
-	private void preformMove(String moveToMake) {
+	/**
+	 * Performs the move coded by moveToMake
+	 * @param moveToMake the move coded by oldLocation + space + newLocation
+	 */
+	private void performMove(String moveToMake) {
 		if (game.getChessBoard().getPiece(moveToMake.substring(0, 2)) != null && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getIsWhite() != isWhiteTurn)
 			throw new IllegalStateException("It is not your turn to move.");
 		
@@ -108,6 +122,6 @@ public class ChessGUI extends PApplet{
 		else
 			game.makeMove(moveToMake, false);
 		
-//		isWhiteTurn = !isWhiteTurn;
+		isWhiteTurn = !isWhiteTurn;
 	}
 }
