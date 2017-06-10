@@ -122,6 +122,9 @@ public class ChessBoard {
 	 * @return true if the pawn's move is valid, false otherwise
 	 */
 	private boolean validatePawn(boolean isWhite, String loc, String other) {
+		if (loc.equals("") || other.equals(""))
+			return false;
+		
 		boolean capture = false;
 		if (getPiece(other) != null)
 			capture = true;
@@ -137,6 +140,9 @@ public class ChessBoard {
 				return loc.charAt(1)=='2';
 			else
 				return loc.charAt(1)=='7';
+		
+		if (capture)
+			return false;
 		
 		if (isWhite)
 			return other.charAt(0)==loc.charAt(0) && other.charAt(1) - loc.charAt(1) == 1;

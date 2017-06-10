@@ -173,13 +173,13 @@ public class ChessGame {
 	 * @return true if player can en passant, false otherwise
 	 */
 	public boolean canEnPassant(String yourLoc, String otherLoc) {
-		if (board.getPiece(yourLoc) != null && board.getPiece(otherLoc) != null && (!board.getPiece(yourLoc).getType().equals("pawn") || !board.getPiece(otherLoc).getType().equals("pawn")))
+		if (yourLoc.equals(otherLoc) || board.getPiece(yourLoc) == null || board.getPiece(otherLoc) == null || !board.getPiece(yourLoc).getType().equals("pawn") || !board.getPiece(otherLoc).getType().equals("pawn"))
 			return false;
 		
-		if (yourLoc.charAt(1) == '5')
-			return moves.contains("" + otherLoc.substring(0,1) + (otherLoc.charAt(1) + 2) + " " + otherLoc) && board.getPiece(otherLoc.substring(0, 1) + (otherLoc.charAt(1) + 1)) == null;
-		else if (yourLoc.charAt(1) == '4')
-			return moves.contains("" + otherLoc.substring(0,1) + ((char)otherLoc.charAt(1) - 2) + " " + otherLoc) && board.getPiece(otherLoc.substring(0, 1) + (otherLoc.charAt(1) - 1)) == null;
+		if (yourLoc.charAt(1) == '5' && moves.contains(otherLoc.substring(0,1) + "7 " + otherLoc)) 
+			return board.getPiece(otherLoc.substring(0, 1) + "6") == null;
+		else if (yourLoc.charAt(1) == '4' && moves.contains(otherLoc.substring(0,1) + "2 " + otherLoc))
+			return board.getPiece(otherLoc.substring(0, 1) + "3") == null;
 		else
 			return false;
 	}
@@ -193,11 +193,11 @@ public class ChessGame {
 		if (!canEnPassant(yourLoc, otherLoc))
 			throw new IllegalStateException("En Passant is not valid");
 		
-		makeMove(yourLoc + " " + otherLoc, true);
+		board.movePiece(yourLoc, otherLoc, true);
 		
 		if (yourLoc.charAt(1) == '5')
-			makeMove(otherLoc.substring(0, 1) + (otherLoc.charAt(1) + 1), true);
+			makeMove(otherLoc.substring(0, 1) + "5 "+ otherLoc.substring(0, 1) + "6", true);
 		else if (yourLoc.charAt(1) == '4')
-			makeMove(otherLoc.substring(0, 1) + (otherLoc.charAt(1) - 1), true);
+			makeMove(otherLoc.substring(0, 1) + "4 "+ otherLoc.substring(0, 1) + "3", true);
 	}
 }

@@ -3,12 +3,9 @@ package game;
 import processing.core.PApplet;
 import processing.core.PImage;
 //1=49, a=97
-//castling causes null pointer exception
-//en passant causes move not valid
 public class ChessGUI extends PApplet{
 	private ChessGame game;
 	private String move;
-	private String win;
 	private boolean isWhiteTurn;
 	
 	public void setup() {
@@ -19,7 +16,6 @@ public class ChessGUI extends PApplet{
 		game = new ChessGame();
 		isWhiteTurn = true;
 		move = "";
-		win = "";
 	}
 	
 	public void draw() {
@@ -29,6 +25,9 @@ public class ChessGUI extends PApplet{
 		String pieceTitle = "";
 		
 		for (ChessPiece piece : game.getChessBoard().getBoard()) {
+			if(piece.getLocation().equals(""))
+				piece.changeLocation(game.getMoves().get(game.getMoves().size()-1).substring(3));
+			
 			pieceTitle = "";
 			
 			if (piece.getIsWhite())
@@ -45,10 +44,6 @@ public class ChessGUI extends PApplet{
 				pieceTitle += "white";
 			
 			image(loadImage("../../images/"+pieceTitle+".PNG"),(((int) piece.getLocation().charAt(0))-97)*91,(56-((int) piece.getLocation().charAt(1)))*91);
-			
-			textSize(20);
-			text(win, 0, 0);
-					
 		}
 	}
 	
@@ -73,26 +68,46 @@ public class ChessGUI extends PApplet{
 	}
 	
 	private void preformMove(String moveToMake) {
+		if (game.getChessBoard().getPiece(moveToMake.substring(0, 2)) != null && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getIsWhite() != isWhiteTurn)
+			throw new IllegalStateException("It is not your turn to move.");
+		
 		if (isWhiteTurn)
 			if (game.canCastle(isWhiteTurn, moveToMake.charAt(3) == 'g')) {
-				if (moveToMake.substring(3).equals("g1") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king"))
+				if (moveToMake.substring(3).equals("g1") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(true, true);
+					isWhiteTurn = !isWhiteTurn;
+					return;
+				}
 			} else {
-				if (moveToMake.substring(3).equals("c1") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king"))
+				if (moveToMake.substring(3).equals("c1") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(true, false);
+					isWhiteTurn = !isWhiteTurn;
+					return;
+				}
 			}
 		else
 			if (game.canCastle(isWhiteTurn, moveToMake.charAt(3) == 'g')) {
-				if (moveToMake.substring(3).equals("g8") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king"))
+				if (moveToMake.substring(3).equals("g8") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(false, true);
+					isWhiteTurn = !isWhiteTurn;
+					return;
+				}
 			} else {
-				if (moveToMake.substring(3).equals("c8") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king"))
+				if (moveToMake.substring(3).equals("c8") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(false, false);
+					isWhiteTurn = !isWhiteTurn;
+					return;
+				}
 			}
 		
-		if (game.canEnPassant(moveToMake.substring(0,2), moveToMake.substring(3)))
-			game.enPassant(moveToMake.substring(0,2), moveToMake.substring(3));
+		int offset=1;
+		if (isWhiteTurn)
+			offset*=-1;
+		if (game.canEnPassant(moveToMake.substring(0,2), moveToMake.substring(3,4)+(char)(moveToMake.charAt(4)+offset)))
+			game.enPassant(moveToMake.substring(0,2), moveToMake.substring(3,4)+(char)(moveToMake.charAt(4)+offset));
+		else
+			game.makeMove(moveToMake, false);
 		
-		game.makeMove(moveToMake, false);
+//		isWhiteTurn = !isWhiteTurn;
 	}
 }
