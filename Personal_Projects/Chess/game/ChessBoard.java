@@ -83,12 +83,12 @@ public class ChessBoard {
 				return false;
 		
 		if (piece.getType().equals("rook") && piece.getLocation().charAt(0) != loc.charAt(0) && piece.getLocation().charAt(1) != loc.charAt(1))
-			return false;
+			return isValidPath(piece, loc);
 		if (piece.getType().equals("knight"))
 			return (Math.abs(loc.charAt(0) - piece.getLocation().charAt(0)) == 2 && Math.abs(loc.charAt(1) - piece.getLocation().charAt(1)) == 1) || (Math.abs(loc.charAt(1) - piece.getLocation().charAt(1)) == 2 && Math.abs(loc.charAt(0) - piece.getLocation().charAt(0)) == 1);
 		if (piece.getType().equals("bishop"))
 			if (Math.abs(piece.getLocation().charAt(0)-loc.charAt(0)) != Math.abs(piece.getLocation().charAt(1)-loc.charAt(1)))
-				return false;
+				return isValidPath(piece, loc);
 		
 		if (piece.getType().equals("queen"))
 			return isValidMove(new ChessPiece("rook", !piece.getIsWhite(), piece.getLocation()), loc) || isValidMove(new ChessPiece("bishop", !piece.getIsWhite(), piece.getLocation()), loc);
@@ -96,6 +96,83 @@ public class ChessBoard {
 			return validatePawn(piece.getIsWhite(), piece.getLocation(), loc);
 		if (piece.getType().equals("king"))
 			return Math.abs(piece.getLocation().charAt(0) - loc.charAt(0)) <= 1 && Math.abs(piece.getLocation().charAt(1) - loc.charAt(1)) <= 1;
+		
+		return true;
+	}
+	
+	/**
+	 * Returns if the path from piece to loc is valid
+	 * @param piece the piece that is to be moved
+	 * @param loc the new location
+	 * @return if the path from piece to loc is valid
+	 */
+	private boolean isValidPath(ChessPiece piece, String loc) {
+		int dir=8;
+		if (piece.getLocation().charAt(0) < loc.charAt(0))
+			if (piece.getLocation().charAt(1) < loc.charAt(1))
+				dir = 1;
+			else if (piece.getLocation().charAt(1) > loc.charAt(1))
+				dir = 3;
+			else
+				dir = 2;
+		else if (piece.getLocation().charAt(0) > loc.charAt(0))
+			if (piece.getLocation().charAt(1) < loc.charAt(1))
+				dir = 7;
+			else if (piece.getLocation().charAt(1) > loc.charAt(1))
+				dir = 5;
+			else
+				dir = 6;
+		else
+			if (piece.getLocation().charAt(1) < loc.charAt(1))
+				dir = 0;
+			else if (piece.getLocation().charAt(1) > loc.charAt(1))
+				dir = 4;
+		
+		String other = piece.getLocation();
+		while (!other.equals(loc)) {
+			if (piece.getType().equals("rook"))
+				if (dir==0)
+					if (this.getPiece(other.substring(0, 1)+(char)(other.charAt(1)+1)) != null && !(other.substring(0, 1)+(char)(other.charAt(1)+1)).equals(loc))
+						return false;
+					else
+						other = (other.substring(0, 1)+(char)(other.charAt(1)+1));
+				else if (dir==2)
+					if (this.getPiece((char)(other.charAt(0)+1)+other.substring(1)) != null && !((char)(other.charAt(0)+1)+other.substring(1)).equals(loc))
+						return false;
+					else
+						other = ((char)(other.charAt(0)+1)+other.substring(1));
+				else if (dir==4)
+					if (this.getPiece(other.substring(0, 1)+(char)(other.charAt(1)-1)) != null && !(other.substring(0, 1)+(char)(other.charAt(1)-1)).equals(loc))
+						return false;
+					else
+						other = (other.substring(0, 1)+(char)(other.charAt(1)-1));
+				else
+					if (this.getPiece((char)(other.charAt(0)-1)+other.substring(1)) != null && !((char)(other.charAt(0)-1)+other.substring(1)).equals(loc))
+						return false;
+					else
+						other = ((char)(other.charAt(0)-1)+other.substring(1));
+			else if (piece.getType().equals("bishop"))
+				if (dir==1)
+					if (this.getPiece(""+(char)(other.charAt(0)+1)+(char)(other.charAt(1)+1)) != null && !(""+(char)(other.charAt(0)+1)+(char)(other.charAt(1)+1)).equals(loc))
+						return false;
+					else
+						other = (""+(char)(other.charAt(0)+1)+(char)(other.charAt(1)+1));
+				else if (dir==3)
+					if (this.getPiece(""+(char)(other.charAt(0)+1)+(char)(other.charAt(1)-1)) != null && !(""+(char)(other.charAt(0)+1)+(char)(other.charAt(1)-1)).equals(loc))
+						return false;
+					else
+						other = (""+(char)(other.charAt(0)+1)+(char)(other.charAt(1)-1));
+				else if (dir==5)
+					if (this.getPiece(""+(char)(other.charAt(0)-1)+(char)(other.charAt(1)+1)) != null && !(""+(char)(other.charAt(0)-1)+(char)(other.charAt(1)+1)).equals(loc))
+						return false;
+					else
+						other = (""+(char)(other.charAt(0)-1)+(char)(other.charAt(1)+1));
+				else
+					if (this.getPiece(""+(char)(other.charAt(0)-1)+(char)(other.charAt(1)-1)) != null && !(""+(char)(other.charAt(0)-1)+(char)(other.charAt(1)-1)).equals(loc))
+						return false;
+					else
+						other = (""+(char)(other.charAt(0)-1)+(char)(other.charAt(1)-1));
+		}
 		
 		return true;
 	}

@@ -1,26 +1,26 @@
 package prob004;
 
-import java.util.ArrayList;
-
 public class ThreeDigitPalindrome {
 
 	public static void main(String[] args) {
-		ArrayList<Integer> list = new ArrayList<Integer>();
+		int max = 0;
+		boolean pal = true;
 		
-		for (int x = 100; x < 1000; x++) {
-			for (int y=100; y<1000; y++) {
+		for (int x = 1000; x >= 100; x--) {
+			for (int y=1000; y>=100; y--) {
+				pal = true;
 				int z = x*y;
 				String zTest = Integer.toString(z);
 				for (int c=0; c<zTest.length()/2; c++)
-					if (zTest.charAt(c) != zTest.charAt(zTest.length()-c-1))
-						continue;
-					else
-						list.add(z);
+					if (zTest.charAt(c) != zTest.charAt(zTest.length()-(c+1)))
+						pal = false;
+				
+				if (pal && z > max)
+					max = z;
 			}
 		}
 		
-		list.trimToSize();
-		//list
+		System.out.println(max);
 	}
 
 }

@@ -3,7 +3,7 @@ package game;
 import processing.core.PApplet;
 import processing.core.PImage;
 //1=49, a=97
-//TODO: Fix Queen-side castle (both colors); display squares' codes
+//TODO: Fix Queen-side castle (both colors)
 public class ChessGUI extends PApplet{
 	private ChessGame game;
 	private String move;
@@ -52,6 +52,14 @@ public class ChessGUI extends PApplet{
 			
 			image(loadImage("../../images/"+pieceTitle+".PNG"),(((int) piece.getLocation().charAt(0))-97)*91,(56-((int) piece.getLocation().charAt(1)))*91);
 		}
+		
+		textSize(20);
+		String[] let = {"a","b","c","d","e","f","g","h"};
+		for (int i=0; i<8; i++) {
+			for (int j=1; j <= 8; j++) {
+				text(let[i]+j,i*91,(8-j)*91+20);
+			}
+		}
 	}
 	
 	/**
@@ -82,17 +90,17 @@ public class ChessGUI extends PApplet{
 	 * @param moveToMake the move coded by oldLocation + space + newLocation
 	 */
 	private void performMove(String moveToMake) {
-		if (game.getChessBoard().getPiece(moveToMake.substring(0, 2)) != null && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getIsWhite() != isWhiteTurn)
-			throw new IllegalStateException("It is not your turn to move.");
+//		if (game.getChessBoard().getPiece(moveToMake.substring(0, 2)) != null && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getIsWhite() != isWhiteTurn)
+//			throw new IllegalStateException("It is not your turn to move.");
 		
 		if (isWhiteTurn)
-			if (game.canCastle(isWhiteTurn, moveToMake.charAt(3) == 'g')) {
+			if (moveToMake.charAt(3) == 'g' && game.canCastle(isWhiteTurn, moveToMake.charAt(3) == 'g')) {
 				if (moveToMake.substring(3).equals("g1") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(true, true);
 					isWhiteTurn = !isWhiteTurn;
 					return;
 				}
-			} else {
+			} else if (moveToMake.charAt(3) == 'c' && game.canCastle(isWhiteTurn, moveToMake.charAt(3) != 'c')) {
 				if (moveToMake.substring(3).equals("c1") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(true, false);
 					isWhiteTurn = !isWhiteTurn;
@@ -100,13 +108,13 @@ public class ChessGUI extends PApplet{
 				}
 			}
 		else
-			if (game.canCastle(isWhiteTurn, moveToMake.charAt(3) == 'g')) {
+			if (moveToMake.charAt(3) == 'g' && game.canCastle(isWhiteTurn, moveToMake.charAt(3) == 'g')) {
 				if (moveToMake.substring(3).equals("g8") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(false, true);
 					isWhiteTurn = !isWhiteTurn;
 					return;
 				}
-			} else {
+			} else if (moveToMake.charAt(3) == 'c' && game.canCastle(isWhiteTurn, moveToMake.charAt(3) != 'c')) {
 				if (moveToMake.substring(3).equals("c8") && game.getChessBoard().getPiece(moveToMake.substring(0, 2)).getType().equals("king")) {
 					game.castle(false, false);
 					isWhiteTurn = !isWhiteTurn;
@@ -122,6 +130,6 @@ public class ChessGUI extends PApplet{
 		else
 			game.makeMove(moveToMake, false);
 		
-		isWhiteTurn = !isWhiteTurn;
+//		isWhiteTurn = !isWhiteTurn;
 	}
 }

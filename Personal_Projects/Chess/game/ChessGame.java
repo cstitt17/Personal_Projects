@@ -150,16 +150,16 @@ public class ChessGame {
 				rookMove = "h1 f1";
 				kingMove = "e1 g1";
 			} else {
-				rookMove = "h1 d1";
-				kingMove = "a1 c1";
+				rookMove = "a1 d1";
+				kingMove = "e1 c1";
 			}
 		else
 			if (kingSide) {
 				rookMove = "h8 f8";
 				kingMove = "e8 g8";
 			} else {
-				rookMove = "h8 d8";
-				kingMove = "a8 c8";
+				rookMove = "a8 d8";
+				kingMove = "e8 c8";
 			}
 		
 		makeMove(rookMove, true);
