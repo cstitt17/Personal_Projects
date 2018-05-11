@@ -1,43 +1,66 @@
 package prob026;
 
-import java.math.BigDecimal;
+import java.util.HashMap;
 
 public class RecipCyc {
 	
 	public static void main(String[] args) {
-		int max = 0, dMax = 0;
-		
-		for (int d=999; d<1000; d++) {
-			if (d%3!=0 && (d%2==0 || d%5==0)) {
-				System.out.println(d+": "+0);
-				continue;
-			}
-			
-			String decimal = (new BigDecimal((1.0/d))).toString().substring(2);
-			int len = -1, p=1;
-			
-			while (len==-1) {
-				try {
-					String left = decimal.substring(0, p);
-					String right = decimal.substring(p, p + left.length());
-					if (left.equals(right)) {
-						len = p;
-					}
-					p++;
-				} catch (Exception e) {
-					decimal = decimal.substring(1);
-					p=1;
+		HashMap<Integer, Integer> primes = new HashMap<>();
+		int lM = -1, dM = 1;
+		primes.put(2, 0);
+		for (int d = 3; d < 1000; d++) {
+			int max = -1;
+			for (int p : primes.keySet()) {
+				if (d%p == 0 && primes.get(p) > max) {
+					max = primes.get(p);
 				}
 			}
 			
-			if (len > max) {
-				max = len;
-				dMax = d;
+			if (max > -1) {
+				System.out.println(d + ": max = " + max + " len = " + lM);
+				continue;
 			}
 			
-			System.out.println(d+": "+len);
+			int f = 1, p = 0;
+			do {
+				int res = 1;
+				if ((d-1)%f != 0) {
+					f++;
+					continue;
+				}
+				String fb = bin(f);
+				for (int i = 0; i < fb.length(); i++) {
+					int val = (int) Math.round(Math.pow(10, Integer.parseInt(fb.substring(i,i+1))));
+					res = (res*val)%d;
+					if (i != fb.length()-1) {
+						res = (res * res) % d;
+					}
+				}
+				if (res == 1) {
+					p = f;
+					break;
+				}
+				
+				f++;
+			} while (f < d);
+			
+			if (lM < p) {
+				lM = p;
+				dM = d;
+			}
+			primes.put(d, p);
+			System.out.println(d + ": p = " + p + " len = " + lM);
 		}
 		
-		System.out.println(dMax + ": " + max);
+		System.out.println("\n" + "dM = "+dM);
+	}
+	
+	private static String bin(int n) {
+		String res = "";
+		while (n > 0) {
+			res = (n % 2) + res;
+			n /= 2;
+		}
+		return res;
 	}
 }

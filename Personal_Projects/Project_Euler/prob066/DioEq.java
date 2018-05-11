@@ -4,47 +4,39 @@ import java.util.ArrayList;
 
 public class DioEq { //x^2 - D*y^2 = 1
 	public static void main(String[] args) {
-		int square = 1;
-		int nextDiff = 3;
-		ArrayList<Integer> dVals = new ArrayList<>();
-		ArrayList<Integer> squares = new ArrayList<>();
+		ArrayList<Long> big = new ArrayList<>();
 		
-		for (int i=1; i<=1000; i++) {
-			if (i==square) {
-				squares.add(square);
-				System.out.println("Added to squares: "+square);
-				square = square + nextDiff;
-				nextDiff = nextDiff + 2;
-			} else {
-				dVals.add(i);
+		long sqd = 1, od = 3, maxd = Long.MIN_VALUE, maxx = Long.MIN_VALUE;
+		for (long d = 1; d <= 1000; d++) {
+			if (d == sqd) {
+				sqd += od;
+				od += 2;
+				continue;
 			}
-		}
-		
-		while (square + nextDiff > 0) {
-			squares.add(square);
-			System.out.println("Added to squares: "+square);
-			square = square + nextDiff;
-			nextDiff = nextDiff + 2;
-		}
-		
-		int max = 0;
-		int d = 0;
-		
-		for (int dVal : dVals) {
-			for (int x=1; x<=Integer.MAX_VALUE; x++) {
-				int y2 = ((x*x)-1)/dVal;
-				int r = ((x*x)-1)%dVal;
-				if (r==0 && squares.contains(y2)) {
-					if (x>max) {
-						max = x;
-						d = dVal;
-					}
-					System.out.println(dVal + ": " + x);
+			
+			for (long x = 2; x < Long.MAX_VALUE; x++) {
+				if (x*x < 0) {
+					System.out.println("Too big at "+d);
+					big.add(d);
 					break;
+				}
+				
+				if ((x*x - 1)%d == 0) {
+					long sq = (x*x - 1)/d;
+					long rt = Math.round(Math.sqrt(sq));
+					if (rt*rt == sq) {
+						System.out.println(x+"^2 - "+d+" * "+rt+"^2 = 1");
+						if (x > maxx) {
+							maxx = x;
+							maxd = d;
+						}
+						break;
+					}
 				}
 			}
 		}
 		
-		System.out.println("MAX -- "+d+": "+max);
+		System.out.println("Xmax of "+maxx+" is at Dmax of "+maxd);
+		System.out.println(big.toString());
 	}
 }

@@ -2,50 +2,28 @@ package prob063;
 
 public class PowDigCount {
 	public static void main(String[] args) {
-		int count = 0;
-		int b = 0;
-		
-		while (true) {
-			boolean done = false;
-			
-			for (int a = 1; a > 0; a++) {
-				double exp = Math.pow(a, b);
-				
-				if (exp > Integer.MAX_VALUE) {
-					done = true;
+		long count = 0, pow;
+		for (int exp = 1; exp < 30; exp++) {
+			for (int base = 1; base < 10; base++) {
+				pow = power(base,exp);
+				if (pow < 0) {
 					break;
-				}
-				
-				String str;
-				if (!(""+exp).contains("E")) {
-					str = ("" + exp).substring(0, ("" + exp).indexOf("."));
-				} else {
-					str = (""+exp).split("E")[0].substring(0, 1)+(""+exp).split("E")[0].substring(2);
-					
-					if (str.length()==2 && str.charAt(1)=='0') {
-						str = str.substring(0, 1);
-					}
-					
-					int len = Integer.parseInt((""+exp).substring((""+exp).length()-1));
-					while (str.length() <= len) {
-						str = str + "0";
-					}
-				}
-				
-				if (str.length()==b) {
-					System.out.println(a+"^"+b+": "+exp);
+				} else if ((""+pow).length()>exp) {
+					break;
+				} else if ((""+pow).length()==exp) {
 					count++;
-				} else if (str.length() > b) {
-					break;
 				}
-			}
-			
-			b++;
-			if (done) {
-				break;
+				
+				System.out.println(base+"^"+exp+": "+pow+" -- count = "+count);
 			}
 		}
-		
-		System.out.println(count);
+	}
+	
+	private static long power(int base, int exp) {
+		if (exp == 0) {
+			return 1;
+		} else {
+			return base*power(base,exp-1);
+		}
 	}
 }

@@ -1,62 +1,18 @@
 package prob206;
 
-import java.util.ArrayList;
-
 public class ConSq {
 	public static void main(String[] args) {
-		String square = "1_2_3_4_5_6_7_8_9_0";
-		ArrayList<Double> digits;
-		
-		for (int n = 1058921220; n <= 1389026624; n+=10) {
-			boolean done = false;
-			digits = new ArrayList<>();
-			digits.add((double) n);
-			digits = toDigits(digits);
-			
-			for (int i=0; i<digits.size(); i++) {
-				digits.set(i, digits.get(i)*n);
-			}
-			
-			digits = toDigits(digits);
-			
-			ArrayList<Integer> digs = new ArrayList<>();
-			
-			for (double digit : digits) {
-				digs.add((int) Math.round(digit));
-			}
-			
-			if (digs.size() == square.length()) {
-				if (digs.get(0)==0 && digs.get(2)==9 && digs.get(4)==8 && digs.get(6)==7 && digs.get(8)==6 &&
-					digs.get(10)==5 && digs.get(12)==4 && digs.get(14)==3 && digs.get(16)==2 && digs.get(18)==1) {
-					done = true;
+		//                 0000000000111111111
+		//                 0123456789012345678
+		//String square = "1_2_3_4_5_6_7_8_9_0";
+		for (long r = Math.round(Math.sqrt(1020304050607080900l))-1; r<=Math.round(Math.sqrt(1929394959697989990l))+1; r++) {
+			String sq = ""+(r*r);
+			if (sq.charAt(0)=='1' && sq.charAt(2)=='2' && sq.charAt(4)=='3' && sq.charAt(6)=='4' && sq.charAt(8)=='5' && sq.charAt(10)=='6') {
+				if (sq.charAt(12)=='7' && sq.charAt(14)=='8' && sq.charAt(16)=='9' && sq.charAt(18)=='0') {
+					System.out.println(r);
+					break;
 				}
 			}
-			
-			String str = "";
-			for (int digit : digs) {
-				str = digit + str;
-			}
-			
-			System.out.println(n + ": " + str);
-			
-			if (done) {
-				break;
-			}
 		}
-	}
-	
-	private static ArrayList<Double> toDigits(ArrayList<Double> nums) {
-		for (int i=0; i<nums.size(); i++) {
-			while (nums.get(i) >= 10) {
-				if (i==nums.size()-1) {
-					nums.add(1d);
-				} else {
-					nums.set(i+1, nums.get(i+1)+1);
-				}
-				nums.set(i, nums.get(i)-10);
-			}
-		}
-		
-		return nums;
 	}
 }

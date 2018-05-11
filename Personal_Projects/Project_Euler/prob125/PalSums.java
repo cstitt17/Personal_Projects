@@ -1,48 +1,25 @@
 package prob125;
 
+import java.util.ArrayList;
+
 public class PalSums {
 	public static void main(String[] args) {
-		double sum = 0;
-		
-		for (int n=2; n<100000000; n++) {
-			if (!isPalindrome(n)) {
-				continue;
-			}
-			
-			boolean sumPres = false;
-			
-			for (int s = 1; s < n; s++) {
-				int sqs = 0;
-				boolean squareSum = true;
-				int count = 0;
-				
-				for (int i = s; i <= n; i++) {
-					sqs = sqs + i * i;
-					count++;
-					
-					if (sqs > n) {
-						squareSum = false;
-					}
-
-					if (sqs >= n && count > 1) {
-						break;
-					}
+		ArrayList<Long> vals = new ArrayList<>();
+		long sum = 0, limit = Math.round(Math.pow(10, 8));
+		for (long s = 1; s <= limit; s++) {
+			long sq = (s*s);
+			for (long add = 1; sq <= limit; add++) {
+				sq += ((s+add)*(s+add));
+				if (isPalindrome(sq) && sq <= limit && !vals.contains(sq)) {
+					sum += sq;
+					vals.add(sq);
+					System.out.println(sq+" -- "+s+"..."+(s+add)+" sum = "+sum);
 				}
-				
-				if (squareSum) {
-					sumPres = true;
-					break;
-				}
-			}
-			
-			if (sumPres) {
-				System.out.println(sum + " + " + n + " = " + (sum+n));
-				sum = sum + n;
 			}
 		}
 	}
 	
-	private static boolean isPalindrome(int n) {
+	private static boolean isPalindrome(long n) {
 		String str = ""+n;
 		
 		for (int i=0; i<str.length()/2; i++) {

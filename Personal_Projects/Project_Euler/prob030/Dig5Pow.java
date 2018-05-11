@@ -2,21 +2,23 @@ package prob030;
 
 public class Dig5Pow {
 	public static void main(String[] args) {
-		double sum = 0;
-		for (int i=2; i<=Integer.MAX_VALUE; i++) {
-			int total = 0;
-			String str = ""+i;
-			for (int j=0; j<str.length(); j++) {
-				total = total + (int) Math.pow(Integer.parseInt(str.substring(j, j+1)),5);
-				if (total > i || total < 0) {
-					break;
-				} else if (total==i) {
-					sum = sum + total;
-					System.out.println("Added: "+total);
+		long sum, big = 0;
+		for (long i = 2; i < Long.MAX_VALUE; i++) {
+			sum = 0;
+			long j = i, x;
+			while (j > 0) {
+				x = j%10;
+				j/=10;
+				sum += (x*x*x*x*x);
+				if (sum > i) {
 					break;
 				}
 			}
+			
+			if (sum == i) {
+				big += i;
+			}
+			System.out.println(i+"-->"+sum+" -- big = "+big);
 		}
-		System.out.println(sum);
 	}
 }
